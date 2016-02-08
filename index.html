@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kantine Meny</title>
+  <meta name="viewport" content="width-device-width, initial-scale=1">
+  <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css" />
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+ <div data-role="page">
+   <div data-role="header">
+     <h1>Kantinemeny</h1>
+   </div>
+   <div role="main" class="ui-content" id="menycontent">
+      <p>Loading...</p>
+      <ul data-role="listview" data-inset="true">
+        <span id="menylist">
+
+        </span>
+      </ul>
+   </div>
+   <div data-role="footer">
+     <h4>Your source to evryday food</h4>
+   </div>
+ </div>
+
+ <script language="JavaScript" type="text/javascript">
+
+  $(document).ready(function() {
+    $.getJSON("meny.json", function (data) {
+        var items = [];
+        $.each (data, function (key, val){
+          items.push ("<li><a href=\"#\"><img src=\"something.png\"><h2>Mandag</h2><p>" + val + "</p></a></li>");
+        });
+
+        $( "#menylist", {
+          "class": "my-new-list",
+          html: items.join("\n")
+        }).appendTo("body");
+    });
+});
+ </script>
+</body>
+</html>
