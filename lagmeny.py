@@ -58,7 +58,7 @@ def findPicture(meal):
         for match in re.finditer(r'(.*\.(?:jpg|png))', mymatch.group(1), re.IGNORECASE):
             path = match.group(0)
             path_split = path.split("://")
-            new_path = "://%s" % path_split[1]
+            new_path = "//%s" % path_split[1]
             return new_path
 
 def saveMenu():
