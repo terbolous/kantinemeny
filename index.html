@@ -8,16 +8,15 @@
   <script src="jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
- <div data-role="page">
-   <div data-role="header">
-     <h1>Kantinemeny</h1>
-   </div>
-   <div role="main" class="ui-content" id="menycontent">
-      <p>Loading...</p>
-      <ul data-role="listview" data-inset="true">
-        <span id="menylist">
 
-        </span>
+ <div data-role="page" id="today">
+   <div data-role="header">
+     <h1 id="menytitle-day">Dagens meny</h1>
+     <a href="#today">Se ukens meny</a>
+   </div>
+   <div role="main" class="ui-content" id="today-menucontent">
+      <ul data-role="listview" data-inset="true" id="today-menulist">
+        <!-- placeholder for jquery stuff -->
       </ul>
    </div>
    <div data-role="footer">
@@ -25,20 +24,50 @@
    </div>
  </div>
 
+ <div data-role="page" id="week">
+   <div data-role="header">
+     <h1 id="menytitle-week">Ukens meny</h1>
+     <a href="#today">Se dagens meny</a>
+   </div>
+   <div role="main" class="ui-content" id="week-menucontent">
+     <ul data-role="listview" data-inset="true" id="week-menulist">
+        <!-- placeholder for jquery stuff -->
+     </ul>
+   </div>
+ </div>
+
+
+
  <script language="JavaScript" type="text/javascript">
 
-  $(document).ready(function() {
-    $.getJSON("meny.json", function (data) {
-        var items = [];
-        $.each (data, function (key, val){
-          items.push ("<li><a href=\"#\"><img src=\"something.png\"><h2>Mandag</h2><p>" + val + "</p></a></li>");
-        });
 
-        $( "#menylist", {
-          "class": "my-new-list",
-          html: items.join("\n")
-        }).appendTo("body");
-    });
+ $(document).ready(function() {
+  var d_date = new Date();
+  var d_dayofweek = d_date.getDay();
+
+   $.getJSON("menu.json", function (data) {
+     var items = [];
+     var today_items = [];
+     $.each (data, function (key, val){
+       console.log("key: " + key);
+       console.log("val: " + val);
+       console.log("day of week: " + d_dayofweek);
+
+       var header = "<li><h2>" + val["name"] + "</h2>";
+       var soup = "<h3>Soup: " + val["soup"]["name"] +"</h3><img width=\"90\" height=\"90\" src=\"" + val["soup"]["picture"] +"\">";
+       var meal = "<h3>Meal: " + val["meal"]["name"] +"</h3><img width=\"90\" height=\"90\" src=\"" + val["meal"]["picture"] +"\">";
+       var footer = "</li>";
+       if (d_dayofweek == key) {
+         console.log("key and d_dayofweek matches")
+         today_items.push(header + soup + meal + footer);
+       }
+       items.push(header + soup + meal + footer);
+       //items.push ("<li><a href=\"#\"><img src=\"" + val["meal"]["picture" ]+"\"><h2>"+ val["name"] + "</h2><p>" + val["meal"]["name"] + "</p></a></li>");
+     });
+     $("#today-menulist").append(today_items.join("\n"));
+     $("#week-menulist").append(items.join("\n"));
+
+   });
 });
  </script>
 </body>
