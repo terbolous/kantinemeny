@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import urllib2
 import json
 import re
 import posixpath
@@ -58,8 +59,14 @@ def findPicture(meal):
         for match in re.finditer(r'(.*\.(?:jpg|png))', mymatch.group(1), re.IGNORECASE):
             path = match.group(0)
             path_split = path.split("://")
-            new_path = "//%s" % path_split[1]
-            return new_path
+            new_path = "http://%s" % path_split[1]
+            try:
+                urllib2.urlopen(new_path)
+            except urllib2.HTTPError:
+                print "Downloading %s failed, trying next" % new_path
+                next
+            else:
+                return new_path
 
 def saveMenu():
     with open('menu.json', 'w') as f:
